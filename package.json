@@ -1,0 +1,23 @@
+{
+  "name": "node.js-intro",
+  "version": "1.0.0",
+  "description": "introduction to node.js fundamentals",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andybaaall/node.js-intro.git"
+  },
+  "keywords": [
+    "node.js",
+    "npm"
+  ],
+  "author": "andy ball",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andybaaall/node.js-intro/issues"
+  },
+  "homepage": "https://github.com/andybaaall/node.js-intro#readme"
+}
