@@ -12,19 +12,46 @@ const correctAnswers = [
 
 let userAnswers = [];
 
-process.stdout.write(`${questions[0]}`);
 
-process.stdin.on('data', function(answer){
-  userAnswers.push(answer.toString().trim());
-
-  if (userAnswers[0] === correctAnswers[0]) {
-    console.log(`good job`);
-    process.exit();
-  } else {
-    userAnswers = [];
-    process.stdout.write(`${answer} is the wrong answer; please try again. ${questions[0]}`);
+askQuestions = (questions, data) {
+  getQuestions = (err, data){
+    if (err) {
+      process.stdout.write(`${data} is the wrong answer; please try again.`);
+    }
+    data += 1;
+    askQuestion();
   }
-});
+  getQuestions();
+}
+
+
+
+// from  https://nodejs.org/en/knowledge/getting-started/control-flow/what-are-callbacks/
+function processData (callback) {
+  fetchData(function (err, data) {
+    if (err) {
+      console.log("An error has occurred. Abort everything!");
+      return callback(err);
+    }
+    data += 1;
+    callback(data);
+  });
+}
+// askQuestion(1);
+
+// process.stdout.write(`${questions[0]}\n`);
+//
+// process.stdin.on('data', function(answer){
+//   userAnswers.push(answer.toString().trim());
+//
+//   if (userAnswers[0] === correctAnswers[0]) {
+//     console.log(`good job`);
+//     process.exit();
+//   } else {
+//     userAnswers = [];
+//     process.stdout.write(`${answer} is the wrong answer; please try again. ${questions[0]}`);
+//   }
+// });
 
 process.stdout.on('exit', function(){
   process.stdout.write(`good job`);
