@@ -24,15 +24,27 @@ const answers = [
 ];
 
 let userAnswers = [];
+let username;
 
-quiz = () => {
-  askQuestion = (number) => {
-    process.stdout.write(`${questions[number]}\n`);
-    let questionNumber = userAnswers.length;
+// get userName
+function getUsername(input, err){
+  process.stdout.write(`What is your name?\n`);
+    if (err) {
+      throw (err)
+    } else {
+      process.stdin.on('data', function(input){
+        let username = input.toString().trim();
 
-    process.stdin.on('data', function(answer){
-      
+        // ask Q1
+         { ... }
+            // ask Q2
+              { ... }
+                // ask Q3
+                  { ... }
+                    // print data, check filenames, save .txt
+      })
     }
+
 }
 
-quiz();
+getUsername();
