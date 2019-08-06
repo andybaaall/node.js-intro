@@ -2,12 +2,7 @@
 
 // ask for username
 // --- ask a set of questions
-// -------- tell them how many questions they got right
-// -------- tell them which questions they got wrong
-// -------- tell them the correct answers to the questions they got wrong
-// ------------- check to see if username.txt exists
-// ------------------- if not, save the results as username.txt
-// ------------------- if so, save the results as username(parseInt(username)+1).txt
+
 
 const process = require('process');
 
@@ -17,34 +12,65 @@ const questions = [
   `should you make a dog wear a carven pumpkin helmet for Hallowe'en?`
 ];
 
-const answers = [
-  'definitely',
-  'also good',
-  'hard no'
+const correctAnswers = [
+  `definitely`,
+  `also good`,
+  `hard no`
 ];
 
 let userAnswers = [];
 let username;
 
 // get userName
-function getUsername(input, err){
+startQuiz = (input, err) => {
   process.stdout.write(`What is your name?\n`);
+
     if (err) {
       throw (err)
     } else {
-      process.stdin.on('data', function(input){
+
+      process.stdin.on('data', function(input){ // this one is always going to happen ; one process.on(data) per function.
+                                                // more callbacks and functions 
+
         let username = input.toString().trim();
 
         // ask Q1
-         { ... }
-            // ask Q2
-              { ... }
-                // ask Q3
-                  { ... }
-                    // print data, check filenames, save .txt
+        // push the answer to userAnswers;
+        // check if there are more questions - if yes, ask q2
+        // if no, exit quiz
+
+        askQuestion = () => {
+          process.stdout.write(`${questions[userAnswers.length]}\n`);
+          process.stdin.on(`data`, function(input) {
+            let questionNumber = userAnswers.length;
+            console.log(`answering ${questionNumber}`);
+            let answer = input.toString().trim();
+            userAnswers.push(answer);
+            questionNumber = userAnswers.length;
+
+            if (userAnswers.length === correctAnswers.length){
+              console.log(`no more questions`);
+              process.exit();
+            } else {
+              questionNumber = userAnswers.length;
+              console.log('there are more questions');
+              console.log(`now to answer ${questionNumber}`);
+
+            }
+          })
+        }
+
+        askQuestion();
       })
     }
-
 }
 
-getUsername();
+// exit quiz
+// -------- tell them how many questions they got right
+// -------- tell them which questions they got wrong
+// -------- tell them the correct answers to the questions they got wrong
+// ------------- check to see if username.txt exists
+// ------------------- if not, save the results as username.txt
+// ------------------- if so, save the results as username(parseInt(username)+1).txt
+
+startQuiz();
