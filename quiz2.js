@@ -1,9 +1,5 @@
 // https://github.com/19WDWU02/Node-JS-Introduction/blob/master/README.md
 
-// ask for username
-// --- ask a set of questions
-
-
 const process = require('process');
 
 const questions = [
@@ -19,51 +15,34 @@ const correctAnswers = [
 ];
 
 let userAnswers = [];
-let username;
+let usernameValidation = false;
 
-// get userName
-startQuiz = (input, err) => {
-  process.stdout.write(`What is your name?\n`);
 
-    if (err) {
-      throw (err)
-    } else {
+process.stdout.write(`What is your name?\n`);
 
-      process.stdin.on('data', function(input){ // this one is always going to happen ; one process.on(data) per function.
-                                                // more callbacks and functions 
+process.stdin.on(`data`, function(input){
+	let response = input.toString().trim();
+	console.log(`input was ${response};`);
 
-        let username = input.toString().trim();
+	process.stdout.write(`${questions[0]}\n`)
+	console.log(`input was ${response};`);
+	userAnswers.push(response);
+	console.log(userAnswers);
 
-        // ask Q1
-        // push the answer to userAnswers;
-        // check if there are more questions - if yes, ask q2
-        // if no, exit quiz
+	// I think it's necessary to push every user answer into the userAnswers[] array, in order to check whether each answer is correct.
+	// in order to do this, I think it's necessary to redefine <response>
+	// ... but this can't be done without using another process.standin.on('data', ...)
+	// ... which it shouldn't, because only one process.standin.on('data', ...) should run per script?
 
-        askQuestion = () => {
-          process.stdout.write(`${questions[userAnswers.length]}\n`);
-          process.stdin.on(`data`, function(input) {
-            let questionNumber = userAnswers.length;
-            console.log(`answering ${questionNumber}`);
-            let answer = input.toString().trim();
-            userAnswers.push(answer);
-            questionNumber = userAnswers.length;
+});
 
-            if (userAnswers.length === correctAnswers.length){
-              console.log(`no more questions`);
-              process.exit();
-            } else {
-              questionNumber = userAnswers.length;
-              console.log('there are more questions');
-              console.log(`now to answer ${questionNumber}`);
 
-            }
-          })
-        }
 
-        askQuestion();
-      })
-    }
-}
+
+
+
+
+
 
 // exit quiz
 // -------- tell them how many questions they got right
@@ -72,5 +51,3 @@ startQuiz = (input, err) => {
 // ------------- check to see if username.txt exists
 // ------------------- if not, save the results as username.txt
 // ------------------- if so, save the results as username(parseInt(username)+1).txt
-
-startQuiz();
