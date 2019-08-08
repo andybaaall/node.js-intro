@@ -14,11 +14,12 @@ const correctAnswers = [
 ];
 
 let userAnswers = [];
+let userCorrectAnswers = [];
 let usernameValidation = false;
 
 function askQuestion(number){
   process.stdout.write(`${questions[number]}\n`);
-}
+};
 
 process.stdout.write(`What is your name?\n`);
 
@@ -30,45 +31,42 @@ process.stdin.on(`data`, function(data){
       process.stdout.write(`Sorry, that username is taken! try another\n`);
 
     } else {
-      const data = `quiz results for ${username}`;
-      fs.writeFile(`halloweenQuizResults/${username}.txt`, data, (err) => {
+      const writeFileInput = `quiz results for ${username}`;
+
+      fs.writeFile(`halloweenQuizResults/${username}.txt`, writeFileInput, (err) => {
         if (err) throw err;
       });
 
       usernameValidation = true;
       process.stdout.write(`Awesome. Nice to meet you, ${username}\n`);
       askQuestion(0);
-
     }
   } else {
-      userAnswers.push(data.toString().trim());
+    userAnswers.push(data.toString().trim());
 
-      if (userAnswers.length === correctAnswers.length) {
-        process.exit();
+    if (userAnswers.length === correctAnswers.length) {
+      for (var i = 0; i < userAnswers.length; i++) {
+        if (userAnswers[i] === correctAnswers[i]) {
+          userCorrectAnswers.push(userAnswers[i]);
 
-      } else {
-        askQuestion(userAnswers.length);
-      }
-  }
-})
+          fs.appendFileSync(`halloweenQuizResults/${username}.txt`, `\nQ${i + 1}. - good job, you got this one right!`, function (err){
+            if (err) throw err;
+          }) // appendFileSync
+        } else {
+          fs.appendFileSync(`halloweenQuizResults/${username}.txt`, `\nQ${i + 1}. - you said "${data.toString().trim()}", but the correct answer was "${correctAnswers[i]}."`, function (err){
+            if (err) throw err;
+          }) // appendFileSync()
+        } // else
+      } // for loop
+      process.exit();
+    } else {
+      askQuestion(userAnswers.length);
+    } // else
+  } // else
+}) // on('data')
 
-process.on('exit', function(){
-  for (var i = 0; i < userAnswers.length; i++) {
-    if (userAnswers[i] === correctAnswers[i]){
-      fs.appendFile(`halloweenQuizResults/${username}.txt`, `\nyou got question number ${i + 1} correct\n`, function (err){
-        if (err) throw err;
-        console.log(`appended data to halloweenQuizResults/${username}.txt`);
-      })
-    }
+process.on(`exit`, function(){
+  console.log(`good job! you can check your results in the ${username}.txt file`);
+  console.log(`(By the way, you got ${userCorrectAnswers.length} out of ${questions.length} correct.)`);
 
-    else {
-      fs.appendFile(`halloweenQuizResults/${username}.txt`, `\nyou got question number ${i + 1} incorrect; the correct answer was ${correctAnswers[i]}\n`, function (err){
-        if (err) throw err;
-        console.log(`appended data to halloweenQuizResults/${username}.txt`);
-
-      })
-    }
-  }
-
-  process.stdout.write(`You can check out your results in halloweenQuizResults/${username}.txt :)\n`);
 });
